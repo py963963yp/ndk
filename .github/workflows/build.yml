@@ -25,9 +25,9 @@ jobs:
       - name: Build with NDK
         run: |
           TOOLCHAIN=$NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin
-          # NDK r28 用自带 clang 即可，它知道 sysroot 在哪
           $TOOLCHAIN/clang++ \
             --target=aarch64-linux-android28 \
+            -DPAGE_SIZE=4096 \
             -I include -I include/ImGui \
             -I include/Android_draw \
             -I include/Android_touch \
