@@ -25,12 +25,9 @@ jobs:
       - name: Build with NDK
         run: |
           TOOLCHAIN=$NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin
-          SYSROOT=$NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/sysroot
-          PLATFORM=$NDK_HOME/platforms/android-28/arch-arm64
-          $TOOLCHAIN/clang++ --target=aarch64-linux-android28 \
-            --sysroot=$SYSROOT \
-            -isystem $SYSROOT/usr/include \
-            -isystem $PLATFORM/usr/include \
+          # NDK r28 用自带 clang 即可，它知道 sysroot 在哪
+          $TOOLCHAIN/clang++ \
+            --target=aarch64-linux-android28 \
             -I include -I include/ImGui \
             -I include/Android_draw \
             -I include/Android_touch \
@@ -45,7 +42,6 @@ jobs:
             src/ImGui/imgui_impl_android.cpp \
             src/ImGui/imgui_impl_opengl3.cpp \
             src/ImGui/imgui_switch.cpp src/ImGui/stb_image.cpp \
-            -L $PLATFORM/usr/lib \
             -lEGL -lGLESv2 -lGLESv3 -landroid -llog -ldl -lm -lc \
             -o my_binary_arm64
 
