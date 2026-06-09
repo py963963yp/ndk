@@ -25,6 +25,16 @@ jobs:
       - name: Build with NDK
         run: |
           TOOLCHAIN=$NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin
+          
+          # 补上项目缺失的全局变量定义
+          cat > /tmp/stubs.cpp << 'STUBEOF'
+          #include "imgui.h"
+          ImDrawList* draw = nullptr;
+          ImFont* iconfont = nullptr;
+          ImFont* info_little = nullptr;
+          ImFont* info = nullptr;
+          STUBEOF
+          
           $TOOLCHAIN/clang++ \
             --target=aarch64-linux-android28 \
             -DPAGE_SIZE=4096 \
@@ -34,6 +44,7 @@ jobs:
             -I include/native_surface \
             -I include/native_surface/aosp \
             -std=c++17 -fPIE \
+            /tmp/stubs.cpp \
             src/main.cpp \
             src/Android_draw/draw.cpp \
             src/Android_touch/TouchHelperA.cpp \
